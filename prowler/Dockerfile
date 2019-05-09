@@ -1,5 +1,12 @@
 FROM python:alpine
-RUN pip install awsie awscli
+RUN apk add --update --no-cache bash git curl
+RUN pip install awscli
+
+RUN git clone https://github.com/toniblyx/prowler /prowler
+
 LABEL io.whalebrew.config.environment '["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN", "AWS_DEFAULT_REGION", "AWS_DEFAULT_PROFILE", "AWS_PROFILE", "AWS_CONFIG_FILE"]'
 LABEL io.whalebrew.config.volumes '["~/.aws:/.aws"]'
-ENTRYPOINT ["awsie"]
+
+RUN chmod 777 /prowler/prowler
+
+ENTRYPOINT ["bash", "/prowler/prowler"]
